@@ -76,7 +76,7 @@ public class Init {
         driver.quit();
     }
 
-    @Test
+    @Test(priority = 0)
     public void login() throws Exception
     {
          element = driver.findElementById("com.pingan.papd:id/iv_ignore");
@@ -84,18 +84,18 @@ public class Init {
         if (element!=null)
         {
             element.click();
-            Thread.sleep(300);
+            Thread.sleep(100);
         }
 
         driver.findElementById("com.pingan.papd:id/phone_number_edit").clear();
         driver.findElementById("com.pingan.papd:id/phone_number_edit").sendKeys("16012332595");
         driver.findElementById("com.pingan.papd:id/send_reqcode_btn").click();
-        Thread.sleep(200);
+        Thread.sleep(100);
         driver.findElementById("com.pingan.papd:id/verify_code_et").sendKeys("666666");
-        Thread.sleep(200);
+        Thread.sleep(100);
        driver.findElementById ("com.pingan.papd:id/login_btn").click();
 
-        Thread.sleep(100);
+        //Thread.sleep(100);
 
         //是否有新手教程动画
 
@@ -119,13 +119,13 @@ public class Init {
 
         ArrayList list = new ArrayList<String>();
         list.add("com.pingan.papd:id/msg_dialog_btn_cancel");
-        list.add("com.pingan.papd:id/pop_ad_close_half");
-        list.add("com.pingan.papd:id/pop_ad_close_full");
+        //list.add("com.pingan.papd:id/pop_ad_close_half");
+        //list.add("com.pingan.papd:id/pop_ad_close_full");
 
         String[] strArray1 = new String[3];
         strArray1[0] = "com.pingan.papd:id/msg_dialog_btn_cancel";
-        strArray1[1] = "com.pingan.papd:id/pop_ad_close_half";
-        strArray1[2] = "com.pingan.papd:id/pop_ad_close_full";
+        //strArray1[1] = "com.pingan.papd:id/pop_ad_close_half";
+        //strArray1[2] = "com.pingan.papd:id/pop_ad_close_full";
 
 
         for(int i = 0;i<2;i++)
@@ -148,7 +148,7 @@ public class Init {
                         } while (element.isDisplayed());
 
                     } catch (Exception e) {
-                        System.out.println("当前页面没有此元素：" + list.get(j).toString());
+                        //System.out.println("当前页面没有此元素：" + list.get(j).toString());
                     }
                 }
             }
@@ -226,7 +226,31 @@ public class Init {
 
 
     }
-    @Test
+
+    @Test(priority = 1)
+    public void barClick() throws Exception
+    {
+        //List<AndroidElement> barTabs = new ArrayList<AndroidElement>();
+
+        //barTabs = driver.findElementsByXPath("//android.widget.RelativeLayout[5]/");
+
+        ArrayList<String> barString = new ArrayList<String>();
+        barString.add("com.pingan.papd:id/textTab2");
+        barString.add("com.pingan.papd:id/textTab3");
+        barString.add("com.pingan.papd:id/textTab4");
+        barString.add("com.pingan.papd:id/btnSwitch");
+
+        for(int j = 0;j<2;j++)
+        {
+            for(int i = 0;i<barString.size(); i++)
+            {
+                driver.findElementById(barString.get(i)).click();
+                Thread.sleep(1200);
+            }
+        }
+
+    }
+    @Test(priority = 2)
     public void search() throws Exception
     {
         String[] tabNames = new String[6];
@@ -250,7 +274,7 @@ public class Init {
         String tip = driver.findElementById("com.pingan.papd:id/et_search_content").getText();
         Assert.assertNotNull(tip);
 
-        driver.findElementById("com.pingan.papd:id/et_search_content").sendKeys("测试");
+        driver.findElementById("com.pingan.papd:id/et_search_content").sendKeys("健康");
 
         //点击搜索按钮，并发起搜索
         element = driver.findElementById("com.pingan.papd:id/bt_search");
@@ -265,7 +289,11 @@ public class Init {
 
         List<AndroidElement> searchTabs = new ArrayList<AndroidElement>();
 
-        searchTabs = driver.findElementsByClassName("android.widget.HorizontalScrollView");
+        //searchTabs = driver.findElementsByClassName("android.widget.HorizontalScrollView");
+
+        //Boolean viewExist = searchTabs.contains(driver.findElementByClassName("android.widget.TextView"));
+
+        searchTabs = driver.findElementsByXPath("//android.widget.HorizontalScrollView/android.widget.LinearLayout/android.widget.TextView");
 
         element = driver.findElementById("com.pingan.papd:id/tab_indicator");
 
@@ -273,15 +301,43 @@ public class Init {
 
         System.out.println("searchTabSize:"+searchTabs.size());
 
-        for (int i = 0;i <searchTabs.size();i++)
+        for (int i = 1;i <searchTabs.size();i++)
         {
-            element = searchTabs.get(i).findElementByClassName("android.widget.TextView");
+            element = searchTabs.get(i);
             element.click();
             System.out.println("分别点击了动态tab："+element.getText());
-            Thread.sleep(1500);
-        }
+            Utility.swipeUP(driver);
+            Utility.swipeDown(driver);
+            Thread.sleep(1000);
+       }
 
-        }
+       //返回到医疗首页
+
+        driver.findElementById("com.pingan.papd:id/iv_search_bar_back").click();
+
+    }
+
+
+    @Test(priority = 3)
+    public void clickMsg_quit() throws Exception
+    {
+        driver.findElementById("com.pingan.papd:id/textTab4").click();
+        driver.findElementById("com.pingan.papd:id/imageMsg").click();
+
+        driver.findElementById("com.pingan.papd:id/title_back_icon").click();
+
+        driver.findElementById("com.pingan.papd:id/imageSetting").click();
+
+        driver.findElementById("com.pingan.papd:id/settings_logout").click();
+
+        driver.findElementById("com.pingan.papd:id/tv_logout").click();
+
+
+
+    }
+
+
+
 
 
 }
